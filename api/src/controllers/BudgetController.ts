@@ -9,7 +9,7 @@ export class BudgetController {
                     createdAt: 'desc',
                 },
                 where: {
-                    userId: 1,
+                    userId: req.user!.id,
                 },
             });
             res.json(budgets);
@@ -26,7 +26,7 @@ export class BudgetController {
                 data: {
                     name,
                     amount,
-                    userId: 1,
+                    userId: req.user!.id,
                 },
             });
             res.status(201).json('Presupuesto Creado Correctamente');
