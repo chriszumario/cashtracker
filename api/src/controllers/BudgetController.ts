@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import { prisma } from '../config/prisma';
-
+import { prisma } from '@src/config/prisma';
+import { handleError } from '@src/utils/handle-error';
 export class BudgetController {
     static getAll = async (req: Request, res: Response) => {
         try {
@@ -14,8 +14,7 @@ export class BudgetController {
             });
             res.json(budgets);
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ error: 'Hubo un error' });
+            return handleError(res, error);
         }
     };
 
@@ -31,8 +30,7 @@ export class BudgetController {
             });
             res.status(201).json('Presupuesto Creado Correctamente');
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ error: 'Hubo un error' });
+            return handleError(res, error);
         }
     };
 
