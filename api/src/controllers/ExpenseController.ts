@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../config/prisma';
+import { handleError } from '@src/utils/handle-error';
 
 export class ExpensesController {
     static create = async (req: Request, res: Response) => {
@@ -14,8 +15,7 @@ export class ExpensesController {
             });
             res.status(201).json('Gasto Agregado Correctamente');
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ error: 'Hubo un error' });
+            handleError(res, error);
         }
     };
 

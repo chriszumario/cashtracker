@@ -2,6 +2,7 @@ import { param, validationResult, body } from 'express-validator';
 import type { Budget } from '@prisma/client';
 import { prisma } from '../config/prisma';
 import type { NextFunction, Request, Response } from 'express';
+import { handleError } from '@src/utils/handle-error';
 
 declare global {
     namespace Express {
@@ -53,8 +54,7 @@ export const validateBudgetExists = async (
         req.budget = budget;
         next();
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Hubo un error' });
+        handleError(res, error);
     }
 };
 

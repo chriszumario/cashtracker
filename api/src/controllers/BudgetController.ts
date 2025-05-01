@@ -14,7 +14,7 @@ export class BudgetController {
             });
             res.json(budgets);
         } catch (error) {
-            return handleError(res, error);
+            handleError(res, error);
         }
     };
 
@@ -30,7 +30,7 @@ export class BudgetController {
             });
             res.status(201).json('Presupuesto Creado Correctamente');
         } catch (error) {
-            return handleError(res, error);
+            handleError(res, error);
         }
     };
 

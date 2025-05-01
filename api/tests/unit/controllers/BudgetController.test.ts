@@ -1,9 +1,20 @@
 import { describe, test, expect, beforeEach } from 'bun:test';
 import { createRequest, createResponse } from 'node-mocks-http';
 import { BudgetController } from '@src/controllers/BudgetController';
-import { prismaMock } from '../../mocks/prisma.mock';
-import { budgets } from '../../fixtures/budget.fixture';
+import { prismaMock } from '@tests/mocks/prisma.mock';
+import { budgets } from '@tests/fixtures/budget.fixture';
 
+// Test constants
+const USER_ID = 1;
+const BUDGET_ID = 1;
+const NON_EXISTENT_USER_ID = 999;
+const NON_EXISTENT_BUDGET_ID = 3;
+const NEW_BUDGET = {
+    name: 'New Budget',
+    amount: 500,
+};
+
+// Helper functions for mocking
 const mockFindManyBudgets = () => {
     prismaMock.budget.findMany.mockImplementation((options) => {
         const userBudgets = budgets
@@ -20,13 +31,11 @@ const mockFindManyBudgets = () => {
 const mockFindUniqueBudget = () => {
     prismaMock.budget.findUnique.mockImplementation((options) => {
         const budget = budgets.find((budget) => budget.id === options.where.id);
-        if (budget) {
-            return Promise.resolve(budget);
-        }
-        return Promise.resolve(null);
+        return Promise.resolve(budget || null);
     });
 };
 
+// Group tests for BudgetController.getAll
 describe('BudgetController.getAll', () => {
     beforeEach(() => {
         prismaMock._reset(); // Reset mocks before each test
@@ -35,11 +44,10 @@ describe('BudgetController.getAll', () => {
 
     test('should return budgets for the current user', async () => {
         // Arrange
-        const userId = 1;
         const req = createRequest({
             method: 'GET',
             url: '/api/budgets',
-            user: { id: userId },
+            user: { id: USER_ID },
         });
         const res = createResponse();
 
@@ -50,7 +58,7 @@ describe('BudgetController.getAll', () => {
         const data = res._getJSONData();
         expect(prismaMock.budget.findMany).toHaveBeenCalledWith({
             orderBy: { createdAt: 'desc' },
-            where: { userId },
+            where: { userId: USER_ID },
         });
         expect(prismaMock.budget.findMany).toHaveBeenCalledTimes(1);
         expect(res.statusCode).toBe(200);
@@ -59,12 +67,10 @@ describe('BudgetController.getAll', () => {
 
     test('should return an empty array if the user has no budgets', async () => {
         // Arrange
-        const userId = 99; // User with no budgets
-
         const req = createRequest({
             method: 'GET',
             url: '/api/budgets',
-            user: { id: userId },
+            user: { id: NON_EXISTENT_USER_ID },
         });
         const res = createResponse();
 
@@ -75,7 +81,7 @@ describe('BudgetController.getAll', () => {
         const data = res._getJSONData();
         expect(prismaMock.budget.findMany).toHaveBeenCalledWith({
             orderBy: { createdAt: 'desc' },
-            where: { userId },
+            where: { userId: NON_EXISTENT_USER_ID },
         });
         expect(prismaMock.budget.findMany).toHaveBeenCalledTimes(1);
         expect(res.statusCode).toBe(200);
@@ -84,11 +90,10 @@ describe('BudgetController.getAll', () => {
 
     test('should handle database errors gracefully', async () => {
         // Arrange
-        const userId = 1;
         const req = createRequest({
             method: 'GET',
             url: '/api/budgets',
-            user: { id: userId },
+            user: { id: USER_ID },
         });
         const res = createResponse();
         prismaMock.budget.findMany.mockRejectedValue(new Error());
@@ -103,26 +108,22 @@ describe('BudgetController.getAll', () => {
     });
 });
 
+// Group tests for BudgetController.create
 describe('BudgetController.create', () => {
     test('Should create a new budget and respond with statusCode 201', async () => {
         // Arrange
-        const userId = 1;
         const req = createRequest({
             method: 'POST',
             url: '/api/budgets',
-            user: { id: userId },
-            body: {
-                name: 'New Budget',
-                amount: 500,
-            },
+            user: { id: USER_ID },
+            body: NEW_BUDGET,
         });
         const res = createResponse();
 
         prismaMock.budget.create.mockResolvedValue({
             id: 3,
-            name: 'New Budget',
-            amount: 500,
-            userId,
+            ...NEW_BUDGET,
+            userId: USER_ID,
             createdAt: new Date(),
             updatedAt: new Date(),
         });
@@ -133,8 +134,8 @@ describe('BudgetController.create', () => {
         // Assert
         expect(prismaMock.budget.create).toHaveBeenCalledWith({
             data: {
-                ...req.body,
-                userId,
+                ...NEW_BUDGET,
+                userId: USER_ID,
             },
         });
         expect(prismaMock.budget.create).toHaveBeenCalledTimes(1);
@@ -143,15 +144,11 @@ describe('BudgetController.create', () => {
     });
     test('Should handle errors gracefully', async () => {
         // Arrange
-        const userId = 1;
         const req = createRequest({
             method: 'POST',
             url: '/api/budgets',
-            user: { id: userId },
-            body: {
-                name: 'New Budget',
-                amount: 500,
-            },
+            user: { id: USER_ID },
+            body: NEW_BUDGET,
         });
         const res = createResponse();
 
@@ -163,8 +160,8 @@ describe('BudgetController.create', () => {
         // Assert
         expect(prismaMock.budget.create).toHaveBeenCalledWith({
             data: {
-                ...req.body,
-                userId,
+                ...NEW_BUDGET,
+                userId: USER_ID,
             },
         });
         expect(res.statusCode).toBe(500);
@@ -172,17 +169,17 @@ describe('BudgetController.create', () => {
     });
 });
 
+// Group tests for BudgetController.getById
 describe('BudgetController.getById', () => {
     beforeEach(() => {
         mockFindUniqueBudget();
     });
     test('should return a budget with ID 1 and 3 expenses', async () => {
         // Arrange
-        const userId = 1;
         const req = createRequest({
             method: 'GET',
             url: '/api/budgets/:budgetId',
-            budget: { id: userId },
+            budget: { id: BUDGET_ID },
         });
         const res = createResponse();
 
@@ -192,7 +189,7 @@ describe('BudgetController.getById', () => {
         // Assert
         const data = res._getJSONData();
         expect(prismaMock.budget.findUnique).toHaveBeenCalledWith({
-            where: { id: userId },
+            where: { id: BUDGET_ID },
             include: { expenses: true },
         });
         expect(prismaMock.budget.findUnique).toHaveBeenCalledTimes(1);
@@ -202,11 +199,10 @@ describe('BudgetController.getById', () => {
     });
     test('should return a budget with ID 3 and 0 expenses', async () => {
         // Arrange
-        const userId = 3;
         const req = createRequest({
             method: 'GET',
             url: '/api/budgets/:budgetId',
-            budget: { id: userId },
+            budget: { id: NON_EXISTENT_BUDGET_ID },
         });
         const res = createResponse();
 
@@ -216,7 +212,7 @@ describe('BudgetController.getById', () => {
         // Assert
         const data = res._getJSONData();
         expect(prismaMock.budget.findUnique).toHaveBeenCalledWith({
-            where: { id: userId },
+            where: { id: NON_EXISTENT_BUDGET_ID },
             include: { expenses: true },
         });
         expect(prismaMock.budget.findUnique).toHaveBeenCalled();
@@ -225,14 +221,14 @@ describe('BudgetController.getById', () => {
     });
 });
 
+// Group tests for BudgetController.updateById
 describe('BudgetController.updateById', () => {
     test('should update a budget with ID 1', async () => {
         // Arrange
-        const userId = 1;
         const req = createRequest({
             method: 'PATCH',
             url: '/api/budgets/:budgetId',
-            budget: { id: userId },
+            budget: { id: BUDGET_ID },
             body: {
                 name: 'Updated Budget',
                 amount: 1000,
@@ -245,7 +241,7 @@ describe('BudgetController.updateById', () => {
 
         // Assert
         expect(prismaMock.budget.update).toHaveBeenCalledWith({
-            where: { id: userId },
+            where: { id: BUDGET_ID },
             data: req.body,
         });
         expect(prismaMock.budget.update).toHaveBeenCalledTimes(1);
@@ -256,14 +252,14 @@ describe('BudgetController.updateById', () => {
     });
 });
 
+// Group tests for BudgetController.deleteById
 describe('BudgetController.deleteById', () => {
     test('should delete a budget with ID 1', async () => {
         // Arrange
-        const userId = 1;
         const req = createRequest({
             method: 'DELETE',
             url: '/api/budgets/:budgetId',
-            budget: { id: userId },
+            budget: { id: BUDGET_ID },
         });
         const res = createResponse();
 
@@ -272,7 +268,7 @@ describe('BudgetController.deleteById', () => {
 
         // Assert
         expect(prismaMock.budget.delete).toHaveBeenCalledWith({
-            where: { id: userId },
+            where: { id: BUDGET_ID },
         });
         expect(prismaMock.budget.delete).toHaveBeenCalledTimes(1);
         expect(res.statusCode).toBe(200);
