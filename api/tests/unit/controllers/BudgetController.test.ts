@@ -17,13 +17,9 @@ const NEW_BUDGET = {
 // Helper functions for mocking
 const mockFindManyBudgets = () => {
     prismaMock.budget.findMany.mockImplementation((options) => {
-        const userBudgets = budgets
-            .filter((budget) => budget.userId === options?.where?.userId)
-            .map((budget) => ({
-                ...budget,
-                createdAt: new Date(budget.createdAt),
-                updatedAt: new Date(budget.updatedAt),
-            }));
+        const userBudgets = budgets.filter(
+            (budget) => budget.userId === options?.where?.userId
+        );
         return Promise.resolve(userBudgets);
     });
 };
@@ -62,7 +58,7 @@ describe('BudgetController.getAll', () => {
         });
         expect(prismaMock.budget.findMany).toHaveBeenCalledTimes(1);
         expect(res.statusCode).toBe(200);
-        expect(data).toHaveLength(2);
+        expect(data.length).toBe(2);
     });
 
     test('should return an empty array if the user has no budgets', async () => {

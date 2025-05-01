@@ -2,11 +2,15 @@ import type { Expense } from '@prisma/client';
 import type { Request, Response, NextFunction } from 'express';
 import { param, validationResult, body } from 'express-validator';
 import { prisma } from '../config/prisma';
+import { handleError } from '@src/utils/handle-error';
 
 declare global {
     namespace Express {
         interface Request {
-            expense?: Expense;
+            expense?: Omit<Expense, 'createdAt' | 'updatedAt'> & {
+                createdAt?: string | Date;
+                updatedAt?: string | Date;
+            };
         }
     }
 }
@@ -71,8 +75,7 @@ export const validateExpenseExists = async (
         req.expense = expense;
         next();
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Hubo un error' });
+        handleError(res, error);
     }
 };
 

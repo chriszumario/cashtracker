@@ -7,7 +7,10 @@ import { handleError } from '@src/utils/handle-error';
 declare global {
     namespace Express {
         interface Request {
-            budget?: Budget;
+            budget?: Omit<Budget, 'createdAt' | 'updatedAt'> & {
+                createdAt?: string | Date;
+                updatedAt?: string | Date;
+            };
         }
     }
 }
