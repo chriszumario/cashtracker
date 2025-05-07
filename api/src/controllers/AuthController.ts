@@ -99,7 +99,7 @@ export class AuthController {
         }
 
         const token = generateJWT({ id: user.id });
-        res.json(token);
+        res.json({ token });
     };
 
     static forgotPassword = async (req: Request, res: Response) => {

@@ -7,7 +7,6 @@ import { budgets } from '@src/data/seed-data';
 import { hasAccess } from '@src/middleware/budget';
 
 // Test constants
-const USER_ID = 1;
 const EXPENSE_ID = 1;
 const NON_EXISTENT_USER_ID = 999;
 const NON_EXISTENT_EXPENSE_ID = 999;
