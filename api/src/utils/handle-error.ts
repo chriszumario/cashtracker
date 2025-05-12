@@ -6,7 +6,7 @@ export const handleError = (
     error: unknown,
     message = 'Hubo un error'
 ) => {
-    if (env.ENVIRONMENT === 'development') {
+    if (env.NODE_ENV === 'development') {
         console.error(error);
     }
     return res.status(500).json({ error: message });

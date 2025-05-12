@@ -6,7 +6,7 @@ import { env } from './env';
  */
 export const corsConfig: CorsOptions = {
     origin: (origin, callback) => {
-        if (env.ENVIRONMENT === 'development') {
+        if (env.NODE_ENV === 'development') {
             console.log(
                 'CORS: Request without origin allowed in development mode'
             );

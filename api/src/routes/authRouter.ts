@@ -45,7 +45,6 @@ router.post(
 router.post(
     '/validate-token',
     body('token')
-        .notEmpty()
         .isLength({ min: 6, max: 6 })
         .withMessage('Token no válido'),
     handleInputErrors,

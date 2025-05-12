@@ -14,7 +14,7 @@ const urlPipe = v.pipe(v.string(), v.check(isValidUrl, 'Invalid URL format'));
 const envSchema = v.object({
     APPLICATION_NAME: v.string(),
     APPLICATION_VERSION: v.string(),
-    ENVIRONMENT: v.union([
+    NODE_ENV: v.union([
         v.literal('development'),
         v.literal('production'),
         v.literal('test'),
@@ -41,7 +41,7 @@ type EnvConfig = v.InferOutput<typeof envSchema>;
 const rawEnv = {
     APPLICATION_NAME: process.env.APPLICATION_NAME ?? '',
     APPLICATION_VERSION: process.env.APPLICATION_VERSION ?? 'v1.0.1',
-    ENVIRONMENT: process.env.ENVIRONMENT ?? 'production',
+    NODE_ENV: process.env.NODE_ENV ?? 'production',
     PORT: Number(process.env.PORT) || 4000,
     BASE_URL: process.env.BASE_URL ?? 'http://localhost',
     DATABASE_URL: process.env.DATABASE_URL,
@@ -59,7 +59,7 @@ const validateEnv = (): EnvConfig => {
     if (result.success) {
         return result.output;
     } else {
-        console.error('Invalid environment configuration:');
+        console.error('Invalid NODE_ENV configuration:');
         result.issues.forEach((issue) => {
             console.error(`${issue.path?.[0]?.key}: ${issue.message}`);
         });
