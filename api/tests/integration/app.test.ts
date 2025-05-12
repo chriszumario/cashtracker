@@ -1,18 +1,20 @@
-import { afterEach, beforeEach, describe, expect, mock, spyOn, test, jest } from 'bun:test'
+import { beforeAll, describe, expect, spyOn, test } from 'bun:test'
 import request from 'supertest'
 import app from '@src/server';
 import { AuthController } from '@src/controllers/AuthController';
+import * as bcryptPassword from '@src/utils/bcrypt';
+import * as token from '@src/utils/jwt';
 import { prisma } from '@src/config/prisma';
 
 describe('Authentication - Create Account', () => {
     test('should display validation errors when form is empty', async () => {
         // Arrange
+        const createAccountMock = spyOn(AuthController, "createAccount");
+
+        // Act
         const response = await request(app)
             .post('/api/auth/create-account')
             .send({})
-
-        // Act
-        const createAccountMock = spyOn(AuthController, "createAccount");
 
         // Assert
         expect(response.statusCode).toBe(400);
@@ -27,6 +29,9 @@ describe('Authentication - Create Account', () => {
 
     test('should return 400 status code when the email is invalid', async () => {
         // Arrange
+        const createAccountMock = spyOn(AuthController, "createAccount");
+
+        // Act
         const response = await request(app)
             .post('/api/auth/create-account')
             .send({
@@ -34,9 +39,6 @@ describe('Authentication - Create Account', () => {
                 email: 'invalid-email',
                 password: 'password',
             })
-
-        // Act
-        const createAccountMock = spyOn(AuthController, "createAccount");
 
         // Assert
         expect(response.statusCode).toBe(400);
@@ -51,6 +53,9 @@ describe('Authentication - Create Account', () => {
 
     test('should return 400 status code when the password is less than 8 characters', async () => {
         // Arrange
+        const createAccountMock = spyOn(AuthController, "createAccount");
+
+        // Act
         const response = await request(app)
             .post('/api/auth/create-account')
             .send({
@@ -58,9 +63,6 @@ describe('Authentication - Create Account', () => {
                 'email': 'test@mail.com',
                 'password': 'pass'
             })
-
-        // Act
-        const createAccountMock = spyOn(AuthController, "createAccount");
 
         // Assert
         expect(response.statusCode).toBe(400);
@@ -74,6 +76,8 @@ describe('Authentication - Create Account', () => {
 
     test('should register a new user successfully', async () => {
         // Arrange
+
+        // Act
         const response = await request(app)
             .post('/api/auth/create-account')
             .send({
@@ -81,7 +85,6 @@ describe('Authentication - Create Account', () => {
                 'email': 'test@mail.com',
                 'password': 'password'
             })
-
 
         // Assert
         expect(response.statusCode).toBe(201);
@@ -93,6 +96,8 @@ describe('Authentication - Create Account', () => {
 
     test('should return 409 conflict when a user is already registered', async () => {
         // Arrange
+
+        // Act
         const response = await request(app)
             .post('/api/auth/create-account')
             .send({
@@ -115,6 +120,8 @@ describe('Authentication - Create Account', () => {
 describe('Authentication - Account Confirmation with Token', () => {
     test('should display error if token is empty or token is not valid', async () => {
         // Arrange
+
+        // Act
         const response = await request(app)
             .post('/api/auth/confirm-account')
             .send({
@@ -133,6 +140,8 @@ describe('Authentication - Account Confirmation with Token', () => {
 
     test('should display error if token doesnt exists', async () => {
         // Arrange
+
+        // Act
         const response = await request(app)
             .post('/api/auth/confirm-account')
             .send({
@@ -150,6 +159,8 @@ describe('Authentication - Account Confirmation with Token', () => {
     test('should confirm account with a valid token', async () => {
         // Arrange
         const token = globalThis.cashTrackrConfirmationToken
+
+        // Act
         const response = await request(app)
             .post('/api/auth/confirm-account')
             .send({
@@ -166,12 +177,12 @@ describe('Authentication - Account Confirmation with Token', () => {
 describe('Authentication - Login', () => {
     test('should display validation errors when the form is empty', async () => {
         // Arrange
+        const loginMock = spyOn(AuthController, 'login')
+
+        // Act
         const response = await request(app)
             .post('/api/auth/login')
             .send({})
-
-        // Act
-        const loginMock = spyOn(AuthController, 'login')
 
         // Assert
         expect(response.statusCode).toBe(400);
@@ -184,15 +195,15 @@ describe('Authentication - Login', () => {
 
     test('should return 400 bad request when the email is invalid', async () => {
         // Arrange
+        const loginMock = spyOn(AuthController, 'login')
+
+        // Act
         const response = await request(app)
             .post('/api/auth/login')
             .send({
                 email: 'invalid-email',
                 password: 'password'
             })
-
-        // Act
-        const loginMock = spyOn(AuthController, 'login')
 
         // Assert
         expect(response.statusCode).toBe(400);
@@ -206,6 +217,8 @@ describe('Authentication - Login', () => {
 
     test('should return a 400 error if the user is not found', async () => {
         // Arrange
+
+        // Act
         const response = await request(app)
             .post('/api/auth/login')
             .send({
@@ -228,7 +241,7 @@ describe('Authentication - Login', () => {
             name: 'Test User',
             email: 'user_not_confirmed@test.com',
             password: 'hashedpassword',
-            token: 'sometoken',
+            token: '123456',
             confirmed: false,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -242,11 +255,7 @@ describe('Authentication - Login', () => {
                 "email": "user_not_confirmed@test.com"
             });
 
-        console.log(response.body);
-
         // Assert
-
-        expect(findUniqueMock).toHaveBeenCalledTimes(1);
         expect(response.status).toBe(403);
         expect(response.body).toHaveProperty('error');
         expect(response.body.error).toBe('La Cuenta no ha sido confirmada');
@@ -257,5 +266,146 @@ describe('Authentication - Login', () => {
         expect(findUniqueMock).toHaveBeenCalledTimes(1);
 
     })
+
+    test('should return a 403 error if the user account is not confirmed', async () => {
+        // Arrange
+        const userData = {
+            id: 1,
+            name: 'Test User',
+            email: 'user_not_confirmed@test.com',
+            password: 'hashedpassword',
+        };
+
+        // Act
+        await request(app)
+            .post('/api/auth/create-account')
+            .send({
+                name: userData.name,
+                email: userData.email,
+                password: userData.password
+            })
+
+        const response = await request(app)
+            .post('/api/auth/login')
+            .send({
+                password: userData.password,
+                email: userData.email
+            })
+
+        // Assert
+        expect(response.status).toBe(403)
+        expect(response.body).toHaveProperty('error')
+        expect(response.body.error).toBe('La Cuenta no ha sido confirmada')
+
+        expect(response.status).not.toBe(200)
+        expect(response.status).not.toBe(404)
+    })
+
+    test('should return a 401 error if the password is incorrect', async () => {
+        // Arrange
+        const findUniqueMock = spyOn(prisma.user, 'findUnique').mockResolvedValueOnce({
+            id: 1,
+            name: 'Test User',
+            email: 'test@mail.com',
+            password: 'hashedpassword',
+            token: null,
+            confirmed: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        })
+
+        const verifyPasswordMock = spyOn(bcryptPassword, 'verifyPassword').mockResolvedValue(false);
+
+        // Act
+        const response = await request(app)
+            .post('/api/auth/login')
+            .send({
+                'email': 'test@example.com',
+                'password': 'incorrectpassword'
+            })
+
+        // Assert
+        expect(verifyPasswordMock).toHaveBeenCalledTimes(1)
+        expect(response.status).toBe(401)
+        expect(response.body).toHaveProperty('error')
+        expect(response.body.error).toBe('Password Incorrecto')
+
+        expect(response.status).not.toBe(200)
+        expect(response.status).not.toBe(404)
+        expect(response.status).not.toBe(403)
+
+        expect(findUniqueMock).toHaveBeenCalledTimes(1)
+        expect(verifyPasswordMock).toHaveBeenCalledTimes(1)
+    })
+
+    test('should return a jwt ', async () => {
+        // // Arrange
+        const findUniqueMock = spyOn(prisma.user, 'findUnique').mockResolvedValueOnce({
+            id: 1,
+            name: 'Test User',
+            email: 'test@example.com',
+            password: 'hashedpassword',
+            token: null,
+            confirmed: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        })
+
+        const verifyPasswordMock = spyOn(bcryptPassword, 'verifyPassword').mockResolvedValue(true);
+        const generateJWTMock = spyOn(token, 'generateJWT').mockReturnValue('jwt_token');
+
+        // Act
+        const response = await request(app)
+            .post('/api/auth/login')
+            .send({
+                'email': 'test@mail.com',
+                'password': 'correctpassword'
+            })
+
+        // Assert
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual('jwt_token')
+
+        expect(findUniqueMock).toHaveBeenCalled()
+        expect(findUniqueMock).toHaveBeenCalledTimes(1)
+
+        expect(verifyPasswordMock).toHaveBeenCalled()
+        expect(verifyPasswordMock).toHaveBeenCalledTimes(1)
+        expect(verifyPasswordMock).toHaveBeenCalledWith('correctPassword', 'hashedPassword')
+
+        expect(generateJWTMock).toHaveBeenCalled()
+        expect(generateJWTMock).toHaveBeenCalledTimes(1)
+        expect(generateJWTMock).toHaveBeenCalledWith(500)
+    })
 })
 
+
+let jwt: string
+
+async function authenticateUser() {
+    const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+            email: "test@mail.com",
+            password: "password"
+        })
+    jwt = response.body.token
+    expect(response.status).toBe(200)
+}
+
+describe('GET /api/budgets', () => {
+    beforeAll(async () => {
+        await authenticateUser()
+    })
+
+    test('should reject unauthenticated access to budgets without a jwt', async () => {
+        // Act
+        const response = await request(app)
+            .get('/api/budgets')
+
+        // Assert
+        expect(response.status).toBe(401)
+        expect(response.body).toHaveProperty('error')
+        expect(response.body.error).toBe('No Autorizado')
+    })
+})
