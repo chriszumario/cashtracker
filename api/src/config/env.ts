@@ -21,6 +21,7 @@ const envSchema = v.object({
     ]),
     PORT: v.pipe(v.number(), v.minValue(1), v.maxValue(65535)),
     BASE_URL: urlPipe,
+    FRONTEND_URL: urlPipe,
     DATABASE_URL: v.pipe(v.string(), v.nonEmpty('DATABASE_URL is required')),
     ALLOWED_ORIGINS: v.pipe(
         v.string(),
@@ -44,6 +45,7 @@ const rawEnv = {
     NODE_ENV: process.env.NODE_ENV ?? 'production',
     PORT: Number(process.env.PORT) || 4000,
     BASE_URL: process.env.BASE_URL ?? 'http://localhost',
+    FRONTEND_URL: process.env.FRONTEND_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
     SMTP_HOST: process.env.SMTP_HOST ?? 'smtp.mailtrap.io',
