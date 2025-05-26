@@ -1,4 +1,5 @@
-import "server-only"
+// Data Access Layer (DAL)
+import 'server-only'
 import { cache } from 'react'
 import { redirect } from "next/navigation"
 import { safeParse } from "valibot"
@@ -24,6 +25,8 @@ export const verifySession = cache(async () => {
     if (!result.success) {
         redirect('/auth/login')
     }
+
+    console.log(result.output)
 
     return {
         user: result.output,

@@ -14,9 +14,9 @@ export default async function AdminLayout({
 
     return (
         <>
-            <header className='bg-purple-950 py-5'>
-                <div className='max-w-5xl mx-auto flex flex-col lg:flex-row justify-between items-center'>
-                    <div className='w-96'>
+            <header className='bg-gradient-to-r from-teal-700 to-emerald-800 py-3 shadow-md'>
+                <div className='max-w-5xl mx-auto px-4 flex flex-row justify-between items-center'>
+                    <div className='w-40'>
                         <Link href={'/admin'}>
                             <Logo />
                         </Link>
@@ -27,7 +27,7 @@ export default async function AdminLayout({
                     />
                 </div>
             </header>
-            <section className='max-w-5xl mx-auto mt-20 p-3 py-10'>
+            <section className='max-w-5xl mx-auto mt-5 p-3 py-10'>
                 {children}
             </section>
 

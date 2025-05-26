@@ -9,8 +9,8 @@ import { formatCurrency, formatDate } from "@/src/utils";
 
 
 export const metadata: Metadata = {
-    title: 'CashTrackr - Panel de Administración',
-    description: 'CashTrackr - Panel de Administración'
+    title: 'CashTracker - Panel de Administración',
+    description: 'CashTracker - Panel de Administración'
 }
 
 async function getUserBudgets() {

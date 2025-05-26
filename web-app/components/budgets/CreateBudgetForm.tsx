@@ -1,6 +1,6 @@
 "use client"
 import { createBudget } from "@/actions/budget/create-budget-action"
-import { useFormState } from "react-dom"
+import { useActionState } from "react"
 import ErrorMessage from "../ui/ErrorMessage"
 import { useEffect } from "react"
 import { toast } from "react-toastify"
@@ -10,7 +10,7 @@ import BudgetForm from "./BudgetForm"
 export default function CreateBudgetForm() {
 
     const router = useRouter()
-    const [state, dispatch] = useFormState(createBudget, {
+    const [state, formAction] = useActionState(createBudget, {
         errors: [],
         success: ''
     })
@@ -27,7 +27,7 @@ export default function CreateBudgetForm() {
         <form
             className="mt-10 space-y-3"
             noValidate
-            action={dispatch}
+            action={formAction}
         >
             {state.errors.map(error => <ErrorMessage key={error}>{error}</ErrorMessage>)}
 

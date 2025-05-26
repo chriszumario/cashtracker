@@ -7,7 +7,7 @@ export default function Logo() {
             alt="Logo CashTrackr"
             width={0}
             height={0}
-            className="w-full"
+            className="w-auto h-12"
             priority
         />
     )
