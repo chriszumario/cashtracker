@@ -26,7 +26,7 @@ export async function editBudget(budgetId: Budget['id'], prevState: ActionStateT
     const token = await getToken()
     const url = `${process.env.API_URL}/budgets/${budgetId}`
     const req = await fetch(url, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -36,6 +36,7 @@ export async function editBudget(budgetId: Budget['id'], prevState: ActionStateT
             amount: budget.output.amount
         })
     })
+
     const json = await req.json()
 
     if (!req.ok) {

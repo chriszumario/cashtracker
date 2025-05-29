@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CashTracker - Aplicación Web de Gestión de Presupuestos
 
-## Getting Started
+CashTracker es una aplicación web moderna para la gestión de presupuestos personales, desarrollada con Next.js y TypeScript. Permite a los usuarios crear presupuestos, registrar gastos y mantener un control detallado de sus finanzas personales.
 
-First, run the development server:
+## Características Principales
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Autenticación de Usuarios**: Sistema completo de registro, inicio de sesión y recuperación de contraseña.
+- **Gestión de Presupuestos**: Creación, edición y eliminación de presupuestos personalizados.
+- **Control de Gastos**: Registro y seguimiento de gastos asociados a cada presupuesto.
+- **Panel de Administración**: Interfaz intuitiva para visualizar y gestionar todos los presupuestos.
+- **Visualización de Datos**: Representación gráfica del progreso de gastos en cada presupuesto.
+- **Diseño Responsivo**: Interfaz adaptable a dispositivos móviles y de escritorio.
+
+## Tecnologías Utilizadas
+
+- **Frontend**:
+  - Next.js 15.3.2 (App Router)
+  - React 19
+  - TypeScript
+  - Tailwind CSS 4
+  - Headless UI
+  - React Toastify
+  - React Circular Progressbar
+
+- **Validación de Datos**:
+  - Valibot (esquemas de validación)
+
+- **Autenticación**:
+  - Sistema basado en JWT (almacenado en cookies)
+
+## Estructura del Proyecto
+
+```
+web-app/
+├── actions/            # Server Actions para operaciones del lado del servidor
+│   ├── auth/           # Acciones de autenticación
+│   ├── budget/         # Acciones para gestión de presupuestos
+│   └── expense/        # Acciones para gestión de gastos
+├── app/                # Estructura de rutas de Next.js (App Router)
+│   ├── admin/          # Panel de administración
+│   ├── auth/           # Rutas de autenticación
+│   └── page.tsx        # Página principal (redirección a /admin)
+├── components/         # Componentes reutilizables
+│   ├── admin/          # Componentes del panel de administración
+│   ├── auth/           # Componentes de autenticación
+│   ├── budgets/        # Componentes para gestión de presupuestos
+│   ├── expenses/       # Componentes para gestión de gastos
+│   ├── profile/        # Componentes para gestión de perfil
+│   └── ui/             # Componentes de interfaz de usuario
+├── public/             # Archivos estáticos
+└── src/                # Código fuente principal
+    ├── auth/           # Lógica de autenticación
+    ├── schemas/        # Esquemas de validación con Valibot
+    ├── services/       # Servicios para comunicación con la API
+    └── utils/          # Utilidades (formateo de moneda, fechas, etc.)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Flujo de Autenticación
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Registro**: Los usuarios pueden crear una cuenta proporcionando nombre, email y contraseña.
+2. **Confirmación de Cuenta**: Verificación mediante código enviado por email.
+3. **Inicio de Sesión**: Autenticación mediante email y contraseña.
+4. **Recuperación de Contraseña**: Proceso de restablecimiento mediante email.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Gestión de Presupuestos
 
-## Learn More
+- Cada presupuesto tiene un nombre y una cantidad asignada.
+- Los usuarios pueden ver todos sus presupuestos en el panel principal.
+- Se muestra información sobre la última actualización de cada presupuesto.
 
-To learn more about Next.js, take a look at the following resources:
+## Control de Gastos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Los gastos se asocian a un presupuesto específico.
+- Cada gasto tiene un nombre y una cantidad.
+- Se muestra un gráfico circular con el porcentaje de presupuesto utilizado.
+- Se calcula automáticamente el monto disponible y gastado.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Requisitos
 
-## Deploy on Vercel
+- Node.js 18.0 o superior
+- Bun (opcional, para mejor rendimiento)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Instalación
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Instalar dependencias
+npm install
+# o con Bun
+bun install
+```
+
+## Configuración
+
+Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variables:
+
+```
+API_URL=http://localhost:3001  # URL de la API de backend
+```
+
+## Ejecución
+
+```bash
+# Modo desarrollo
+npm run dev
+# o con Bun
+bun run dev
+
+# Compilar para producción
+npm run build
+# o con Bun
+bun run build
+
+# Iniciar en modo producción
+npm start
+# o con Bun
+bun start
+```
+
+## Desarrollo
+
+La aplicación utiliza Server Actions de Next.js para operaciones del lado del servidor, lo que permite una experiencia de desarrollo más fluida y segura. La validación de datos se realiza mediante Valibot tanto en el cliente como en el servidor.
+
+## Idioma
+
+La aplicación está desarrollada en español, incluyendo mensajes de error, etiquetas y textos de la interfaz.
+
+## Licencia
+
+Todos los derechos reservados.
