@@ -4,7 +4,7 @@ import { Popover, PopoverButton, PopoverPanel, Transition } from '@headlessui/re
 import {
     Bars3Icon,
     UserCircleIcon,
-    ArrowRightOnRectangleIcon,
+    ArrowRightStartOnRectangleIcon,
     ChartBarIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
@@ -89,7 +89,7 @@ export default function AdminMenu({ user }: AdminMenuProps) {
                                     className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-left text-red-600 hover:bg-red-50 transition-all duration-200 hover:translate-x-1"
                                     type="button"
                                 >
-                                    <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                                    <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
                                     <span>Cerrar Sesión</span>
                                 </button>
                             </div>

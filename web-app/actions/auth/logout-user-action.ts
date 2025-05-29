@@ -4,6 +4,6 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
 export async function logout() {
-    (await cookies()).delete('CASHTRACKR_TOKEN')
+    (await cookies()).delete('CASHTRACKER_TOKEN')
     redirect('/auth/login')
 }
