@@ -12,7 +12,7 @@ type ValidateTokenFormProps = {
 export default function ValidateTokenForm({ setIsValidToken, token, setToken }: ValidateTokenFormProps) {
     const [isComplete, setIsComplete] = useState(false)
     const validateTokenInput = validateToken.bind(null, token)
-    const [state, formAction, pending] = useActionState(validateTokenInput, {
+    const [state, formAction] = useActionState(validateTokenInput, {
         errors: [],
         success: ''
     })
