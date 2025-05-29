@@ -26,7 +26,7 @@ export default function AddExpenseForm({ closeModal }: { closeModal: () => void 
         <>
             <DialogTitle
                 as="h3"
-                className="font-black text-xl md:text-2xl text-purple-950 my-2 text-center bg-gradient-to-r from-purple-900 to-amber-500 bg-clip-text text-transparent"
+                className="font-black text-xl md:text-2xl my-2 text-center bg-gradient-to-r from-purple-900 to-amber-500 bg-clip-text text-transparent"
             >
                 Agregar Gasto
             </DialogTitle>

@@ -27,21 +27,23 @@ export default async function BudgetDetailsPage({ params }: { params: { id: stri
 
     return (
         <>
-            <div className='flex justify-between items-center'>
-                <div>
-                    <h1 className="font-black text-4xl text-purple-950">{budget.name}</h1>
-                    <p className="text-xl font-bold">Administra tus {''} <span className="text-amber-500">gastos</span></p>
+            <div className='flex flex-col md:flex-row md:justify-between items-center mb-6'>
+                <div className="w-full md:w-auto">
+                    <h1 className="font-black text-3xl text-purple-950 my-3">{budget.name}</h1>
+                    <p className="text-lg font-semibold">Administra tus {''} <span className="text-amber-500">gastos</span></p>
                 </div>
-                <AddExpenseButton />
+                <div className="w-full md:w-auto mt-4 md:mt-0">
+                    <AddExpenseButton />
+                </div>
             </div>
 
             {budget.expenses.length ? (
                 <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 mt-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 mt-6 gap-6">
                         <ProgressBar
                             percentage={percentage}
                         />
-                        <div className="flex flex-col justify-center items-center md:items-start gap-5">
+                        <div className="flex flex-col justify-center items-center md:items-start gap-3">
                             <Amount
                                 label="Presupuesto"
                                 amount={+budget.amount}
@@ -57,13 +59,13 @@ export default async function BudgetDetailsPage({ params }: { params: { id: stri
                         </div>
                     </div>
 
-                    <h1 className="font-black text-4xl text-purple-950 mt-10">
+                    <h1 className="font-black text-3xl text-purple-950 mt-8">
                         Gastos en este presupuesto
                     </h1>
 
-                    <ul role="list" className="divide-y divide-gray-300 border shadow-lg mt-10 ">
+                    <ul role="list" className="divide-y divide-gray-300 border shadow-lg mt-6 rounded-lg">
                         {budget.expenses.map((expense) => (
-                            <li key={expense.id} className="flex justify-between gap-x-6 p-5">
+                            <li key={expense.id} className="flex justify-between items-center gap-x-4 py-3 px-5">
                                 <div className="flex min-w-0 gap-x-4">
                                     <div className="min-w-0 flex-auto space-y-2">
                                         <p className="text-2xl font-semibold text-gray-900">

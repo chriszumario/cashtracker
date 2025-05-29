@@ -1,15 +1,14 @@
 "use client"
 
 import { updatePassword } from "@/actions/auth/update-password-action"
-import { useFormState } from "react-dom"
 import ErrorMessage from "../ui/ErrorMessage"
-import { useEffect, useRef } from "react"
+import { useActionState, useEffect, useRef } from "react"
 import { toast } from "react-toastify"
 
 export default function ChangePasswordForm() {
 
   const ref = useRef<HTMLFormElement>(null)
-  const [state, dispatch] = useFormState(updatePassword, {
+  const [state, formAction] = useActionState(updatePassword, {
     errors: [],
     success: ''
   })
@@ -26,7 +25,7 @@ export default function ChangePasswordForm() {
       <form
         className=" mt-14 space-y-5"
         noValidate
-        action={dispatch}
+        action={formAction}
         ref={ref}
       >
         {state.errors.map(error => <ErrorMessage key={error}>{error}</ErrorMessage>)}

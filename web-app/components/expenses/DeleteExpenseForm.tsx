@@ -1,9 +1,8 @@
 import { useParams, useSearchParams } from "next/navigation";
 import { DialogTitle } from "@headlessui/react";
-import { useFormState } from "react-dom";
 import deleteExpense from "@/actions/expense/delete-expense-action";
 import ErrorMessage from "../ui/ErrorMessage";
-import { useEffect } from "react";
+import { useActionState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 type DeleteExpenseForm = {
@@ -11,7 +10,7 @@ type DeleteExpenseForm = {
 }
 
 export default function DeleteExpenseForm({ closeModal }: DeleteExpenseForm) {
-  const { id: budgetId } = useParams()
+  const { id: budgetId } = useParams() as { id: string }
   const searchParams = useSearchParams()
   const expenseId = searchParams.get('deleteExpenseId')!
 
@@ -19,7 +18,7 @@ export default function DeleteExpenseForm({ closeModal }: DeleteExpenseForm) {
     budgetId: +budgetId,
     expenseId: +expenseId
   })
-  const [state, dispatch] = useFormState(deleteExpenseWithBudgetId, {
+  const [state, formAction] = useActionState(deleteExpenseWithBudgetId, {
     errors: [],
     success: ''
   })
@@ -29,13 +28,13 @@ export default function DeleteExpenseForm({ closeModal }: DeleteExpenseForm) {
       toast.success(state.success)
       closeModal()
     }
-  }, [state])
+  }, [state, closeModal])
 
   useEffect(() => {
     if (!Number.isInteger(+budgetId) || !Number.isInteger(+expenseId)) {
       closeModal()
     }
-  }, [])
+  }, [closeModal, budgetId, expenseId])
 
   return (
     <>
@@ -60,7 +59,7 @@ export default function DeleteExpenseForm({ closeModal }: DeleteExpenseForm) {
         <button
           type='button'
           className="bg-red-500 w-full p-3 text-white uppercase font-bold hover:bg-red-600 cursor-pointer transition-colors"
-          onClick={() => dispatch()}
+          onClick={() => formAction()}
         >Eliminar</button>
       </div>
     </>

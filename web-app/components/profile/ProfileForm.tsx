@@ -2,15 +2,14 @@
 
 import { updateUser } from "@/actions/auth/update-user-action"
 import { User } from "@/src/schemas"
-import { useFormState } from "react-dom"
 import ErrorMessage from "../ui/ErrorMessage"
-import { useEffect } from "react"
+import { useActionState, useEffect } from "react"
 import { toast } from "react-toastify"
 
 
 export default function ProfileForm({ user }: { user: User }) {
 
-  const [state, dispatch] = useFormState(updateUser, {
+  const [state, formAction] = useActionState(updateUser, {
     errors: [],
     success: ''
   })
@@ -26,7 +25,7 @@ export default function ProfileForm({ user }: { user: User }) {
       <form
         className=" mt-14 space-y-5"
         noValidate
-        action={dispatch}
+        action={formAction}
       >
         {state.errors.map(error => <ErrorMessage key={error}>{error}</ErrorMessage>)}
         <div className="flex flex-col gap-5">
