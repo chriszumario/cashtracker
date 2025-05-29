@@ -5,7 +5,7 @@ import { BudgetAPIResponseSchema } from "../schemas"
 import { parse } from "valibot"
 
 export const getBudget = cache(async (budgetId: string) => {
-    const token = getToken()
+    const token = await getToken()
     const url = `${process.env.API_URL}/budgets/${budgetId}`
     const req = await fetch(url, {
         headers: {

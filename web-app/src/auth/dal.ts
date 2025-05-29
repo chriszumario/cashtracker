@@ -26,8 +26,6 @@ export const verifySession = cache(async () => {
         redirect('/auth/login')
     }
 
-    console.log(result.output)
-
     return {
         user: result.output,
         isAuth: true

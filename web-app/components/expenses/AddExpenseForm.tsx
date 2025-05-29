@@ -1,16 +1,16 @@
 import { DialogTitle } from "@headlessui/react";
 import ExpenseForm from "./ExpenseForm";
 import createExpense from "@/actions/expense/create-expense-action";
-import { useFormState } from "react-dom";
 import { useParams } from "next/navigation";
 import ErrorMessage from "../ui/ErrorMessage";
-import { useEffect } from "react";
+import { useActionState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 export default function AddExpenseForm({ closeModal }: { closeModal: () => void }) {
     const { id } = useParams()
+    if (!id) throw new Error('Budget ID is required')
     const createExpenseWithBudgetId = createExpense.bind(null, +id)
-    const [state, dispatch] = useFormState(createExpenseWithBudgetId, {
+    const [state, formAction] = useActionState(createExpenseWithBudgetId, {
         errors: [],
         success: ''
     })
@@ -20,7 +20,7 @@ export default function AddExpenseForm({ closeModal }: { closeModal: () => void 
             toast.success(state.success)
             closeModal()
         }
-    }, [state])
+    }, [state, closeModal])
 
     return (
         <>
@@ -39,7 +39,7 @@ export default function AddExpenseForm({ closeModal }: { closeModal: () => void 
             <form
                 className="bg-gray-100 shadow-lg rounded-lg p-10 mt-10 border"
                 noValidate
-                action={dispatch}
+                action={formAction}
             >
 
                 <ExpenseForm />

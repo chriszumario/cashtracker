@@ -147,7 +147,7 @@ export const UserSchema = v.object({
 export const ExpenseAPIResponseSchema = v.object({
     id: v.number(),
     name: v.string(),
-    amount: v.string(),
+    amount: v.number(),
     createdAt: v.string(),
     updatedAt: v.string(),
     budgetId: v.number()
@@ -156,7 +156,7 @@ export const ExpenseAPIResponseSchema = v.object({
 export const BudgetAPIResponseSchema = v.object({
     id: v.number(),
     name: v.string(),
-    amount: v.string(),
+    amount: v.number(),
     userId: v.number(),
     createdAt: v.string(),
     updatedAt: v.string(),

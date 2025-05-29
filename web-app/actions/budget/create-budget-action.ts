@@ -22,7 +22,7 @@ export async function createBudget(prevState: ActionStateType, formData: FormDat
         }
     }
 
-    const token = getToken()
+    const token = await getToken()
     const url = `${process.env.API_URL}/budgets`
 
     const req = await fetch(url, {

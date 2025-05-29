@@ -23,7 +23,8 @@ export default async function createExpense(budgetId: number, prevState: ActionS
     }
 
     // Generar gasto
-    const token = getToken()
+    const token = await getToken()
+    console.log(token)
     const url = `${process.env.API_URL}/budgets/${budgetId}/expenses`
     const req = await fetch(url, {
         method: 'POST',
