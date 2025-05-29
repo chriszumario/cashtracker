@@ -4,6 +4,7 @@ import deleteExpense from "@/actions/expense/delete-expense-action";
 import ErrorMessage from "../ui/ErrorMessage";
 import { useActionState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { startTransition } from "react";
 
 type DeleteExpenseForm = {
   closeModal: () => void
@@ -59,7 +60,11 @@ export default function DeleteExpenseForm({ closeModal }: DeleteExpenseForm) {
         <button
           type='button'
           className="bg-red-500 w-full p-3 text-white uppercase font-bold hover:bg-red-600 cursor-pointer transition-colors"
-          onClick={() => formAction()}
+          onClick={() => {
+            startTransition(() => {
+              formAction();
+            });
+          }}
         >Eliminar</button>
       </div>
     </>
