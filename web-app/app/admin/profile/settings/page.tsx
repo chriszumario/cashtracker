@@ -3,18 +3,18 @@ import { verifySession } from "@/src/auth/dal";
 
 export default async function EditProfilePage() {
 
-    const { user } = await verifySession()
+  const { user } = await verifySession()
 
-    return (
-      <>
-          <h1 className="font-black text-4xl text-purple-950 my-5">Actualizar Perfil</h1>
-          <p className="text-xl font-bold">Aquí puedes cambiar los datos de tu {''}
-              <span className="text-amber-500">perfil</span>
-          </p>
+  return (
+    <>
+      <h1 className="font-black text-3xl text-purple-950 my-3">Actualizar Perfil</h1>
+      <p className="text-lg font-semibold mb-6">Aquí puedes cambiar los datos de tu {''}
+        <span className="text-amber-500">perfil</span>
+      </p>
 
-          <ProfileForm 
-            user={user}
-          />
-      </>
-    )
-  }
+      <ProfileForm
+        user={user}
+      />
+    </>
+  )
+}
