@@ -4,7 +4,7 @@ import "react-circular-progressbar/dist/styles.css"
 
 export default function ProgressBar({ percentage }: { percentage: number }) {
   return (
-    <div className='flex justify-center w-32 h-32'>
+    <div className='flex justify-center w-40 h-40'>
       <CircularProgressbar
         styles={buildStyles({
           pathColor: percentage >= 100 ? '#DC2626' : '#F59E0B',
