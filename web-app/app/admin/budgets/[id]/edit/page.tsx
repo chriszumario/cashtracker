@@ -18,23 +18,17 @@ export default async function EditBudgetPage({ params }: { params: { id: string 
 
   return (
     <>
-      <div className='flex flex-col-reverse md:flex-row md:justify-between items-center'>
-        <div className='w-full md:w-auto'>
-          <h1 className='font-black text-4xl text-purple-950 my-5'>
-            Editar Presupuesto: {budget.name}
-          </h1>
-          <p className="text-xl font-bold">Llena el formulario y crea un nuevo {''}
-            <span className="text-amber-500">presupuesto</span>
-          </p>
-        </div>
-        <Link
-          href={'/admin'}
-          className='bg-amber-500 p-2 rounded-lg text-white font-bold w-full md:w-auto text-center'
-        >
-          Volver
-        </Link>
-      </div>
-      <div className='p-10 mt-10  shadow-lg border '>
+      <Link href={'/admin'} className='text-amber-500 font-semibold flex items-center mb-6'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 mr-1">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75l-6-6m0 0l6-6m-6 6h18" />
+        </svg>
+        Volver al panel
+      </Link>
+      <h1 className='font-black text-3xl text-purple-950 mb-2'>
+        Editar Presupuesto: {budget.name}
+      </h1>
+      <p className="text-lg text-gray-600 mb-8">Modifica los campos del presupuesto existente</p>
+      <div className='p-6 md:p-8 mt-6 shadow-lg border rounded-lg'>
         <EditBudgetForm
           budget={budget}
         />

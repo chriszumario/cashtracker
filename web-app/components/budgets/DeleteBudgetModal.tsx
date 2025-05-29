@@ -11,7 +11,7 @@ export default function DeleteBudgetModal() {
     const searchParams = useSearchParams()
     const deleteBudgetId = searchParams.get('deleteBudgetId')
     const show = deleteBudgetId ? true : false
-    
+
     const hideModal = new URLSearchParams(searchParams.toString())
     hideModal.delete('deleteBudgetId')
 
@@ -19,9 +19,9 @@ export default function DeleteBudgetModal() {
         <>
             <>
                 <Transition appear show={show} as={Fragment}>
-                    <Dialog 
-                        as="div" 
-                        className="relative z-10" 
+                    <Dialog
+                        as="div"
+                        className="relative z-10"
                         onClose={() => router.replace(`${pathname}?${hideModal}`)}>
                         <TransitionChild
                             as={Fragment}
@@ -46,7 +46,7 @@ export default function DeleteBudgetModal() {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <DialogPanel className="w-full max-w-5xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
+                                    <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-6">
                                         <ConfirmPasswordForm />
                                     </DialogPanel>
                                 </TransitionChild>
