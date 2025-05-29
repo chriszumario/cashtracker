@@ -19,7 +19,7 @@ export default async function deleteExpense(
     prevState: ActionStateType
 ) {
 
-    const token = getToken()
+    const token = await getToken()
     const url = `${process.env.API_URL}/budgets/${budgetId}/expenses/${expenseId}`
     const req = await fetch(url, {
         method: 'DELETE',

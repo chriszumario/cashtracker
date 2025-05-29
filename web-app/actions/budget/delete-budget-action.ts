@@ -19,7 +19,7 @@ export async function deleteBudget(budgetId: Budget['id'], prevState: ActionStat
     }
 
     // Comprobar password
-    const token = getToken()
+    const token = await getToken()
     const checkPasswordUrl = `${process.env.API_URL}/auth/check-password`
     const checkPasswordReq = await fetch(checkPasswordUrl, {
         method: 'POST',

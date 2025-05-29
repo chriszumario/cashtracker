@@ -23,7 +23,7 @@ export async function updatePassword(prevState: ActionStateType, formData: FormD
         }
     }
 
-    const token = getToken()
+    const token = await getToken()
     const url = `${process.env.API_URL}/auth/update-password`
     const req = await fetch(url, {
         method: 'POST',

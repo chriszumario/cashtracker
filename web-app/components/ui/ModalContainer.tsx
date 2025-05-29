@@ -1,15 +1,15 @@
 "use client"
-import {  Fragment } from 'react';
+import { Fragment } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Dialog, DialogPanel,  Transition, TransitionChild } from '@headlessui/react';
+import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import AddExpenseForm from '../expenses/AddExpenseForm';
 import EditExpenseForm from '../expenses/EditExpenseForm';
 import DeleteExpenseForm from '../expenses/DeleteExpenseForm';
 
 const componentsMap = {
-    "AddExpense" : AddExpenseForm,
-    "EditExpense" : EditExpenseForm,
-    "DeleteExpense" : DeleteExpenseForm
+  "AddExpense": AddExpenseForm,
+  "EditExpense": EditExpenseForm,
+  "DeleteExpense": DeleteExpenseForm
 }
 
 export default function ModalContainer() {
@@ -25,9 +25,9 @@ export default function ModalContainer() {
   const deleteExpenseId = searchParams.get('deleteExpenseId')
 
   const getComponentName = () => {
-    if(addExpense) return 'AddExpense'
-    if(editExpense) return 'EditExpense'
-    if(deleteExpenseId) return 'DeleteExpense'
+    if (addExpense) return 'AddExpense'
+    if (editExpense) return 'EditExpense'
+    if (deleteExpenseId) return 'DeleteExpense'
   }
 
   const componentName = getComponentName()
@@ -58,7 +58,7 @@ export default function ModalContainer() {
           </TransitionChild>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <div className="flex min-h-full items-center justify-center p-2 md:p-4 text-center">
               <TransitionChild
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -68,8 +68,8 @@ export default function ModalContainer() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <DialogPanel className="w-full max-w-5xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
-                    {ComponentToRender ? <ComponentToRender closeModal={closeModal} /> : null}
+                <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white text-left align-middle shadow-xl transition-all p-4 md:p-6">
+                  {ComponentToRender ? <ComponentToRender closeModal={closeModal} /> : null}
                 </DialogPanel>
               </TransitionChild>
             </div>

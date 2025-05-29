@@ -2,7 +2,7 @@
 import { parse, safeParse } from "valibot"
 import getToken from "@/src/auth/token"
 import { Budget, DraftBudgetSchema, ErrorResponseSchema, SuccessSchema } from "@/src/schemas"
-import { revalidatePath, revalidateTag } from "next/cache"
+import { revalidatePath } from "next/cache"
 
 type ActionStateType = {
     errors: string[]
@@ -23,7 +23,7 @@ export async function editBudget(budgetId: Budget['id'], prevState: ActionStateT
         }
     }
 
-    const token = getToken()
+    const token = await getToken()
     const url = `${process.env.API_URL}/budgets/${budgetId}`
     const req = await fetch(url, {
         method: 'PUT',

@@ -22,7 +22,7 @@ export async function updateUser(prevState: ActionStateType, formData: FormData)
         }
     }
 
-    const token = getToken()
+    const token = await getToken()
     const url = `${process.env.API_URL}/auth/user`
     const req = await fetch(url, {
         method: 'PUT',
