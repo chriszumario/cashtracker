@@ -36,7 +36,7 @@ export default function ConfirmAccountForm() {
                 }
             })
         }
-    }, [state])
+    }, [state, router])
 
     const handleChange = (token: string) => {
         setIsComplete(false)
