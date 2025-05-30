@@ -7,7 +7,7 @@ import { getBudget } from "@/src/services/budgets"
 import { formatCurrency, formatDate } from "@/src/utils"
 import { Metadata } from "next"
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params
     const budget = await getBudget(id)
     return {
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     }
 }
 
-export default async function BudgetDetailsPage({ params }: { params: { id: string } }) {
+export default async function BudgetDetailsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const budget = await getBudget(id)
 

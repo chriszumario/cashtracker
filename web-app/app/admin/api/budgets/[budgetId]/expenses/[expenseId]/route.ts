@@ -1,11 +1,21 @@
 import { verifySession } from "@/src/auth/dal"
 import getToken from "@/src/auth/token"
 
-export async function GET(request: Request, { params }: { params: { budgetId: string, expenseId: string } }) {
+interface RouteParams {
+    budgetId: string
+    expenseId: string
+}
+
+export async function GET(
+    request: Request,
+    { params }: { params: Promise<RouteParams> }
+) {
     await verifySession()
 
     const token = await getToken()
-    const url = `${process.env.API_URL}/budgets/${params.budgetId}/expenses/${params.expenseId}`
+    const { budgetId, expenseId } = await params
+
+    const url = `${process.env.API_URL}/budgets/${budgetId}/expenses/${expenseId}`
     const req = await fetch(url, {
         headers: {
             'Authorization': `Bearer ${token}`
@@ -20,4 +30,3 @@ export async function GET(request: Request, { params }: { params: { budgetId: st
 
     return Response.json(json)
 }
-
