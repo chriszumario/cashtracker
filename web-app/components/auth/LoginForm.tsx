@@ -35,7 +35,7 @@ export default function LoginForm() {
                         placeholder="Email de Registro"
                         className="w-full border border-gray-300 p-3 rounded-lg"
                         name="email"
-                        defaultValue="test@test.com" // Añadir valor por defecto para el email
+                        defaultValue="ryo@mail.com" // Añadir valor por defecto para el email
                     />
                 </div>
 
@@ -49,7 +49,7 @@ export default function LoginForm() {
                         placeholder="Password de Registro"
                         className="w-full border border-gray-300 p-3 rounded-lg"
                         name="password"
-                        defaultValue="password123" // Añadir valor por defecto para la contraseña
+                        defaultValue="12345678" // Añadir valor por defecto para la contraseña
                     />
                 </div>
 
